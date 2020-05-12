@@ -535,7 +535,7 @@ func (this *FmtCtx) SeekFrameAt(sec int64, streamIndex int) error {
 }
 
 func (this *FmtCtx) SetPb(val *AVIOContext) *FmtCtx {
-	this.avCtx.pb = val.avAVIOContext
+	this.avCtx.pb = val.AvAVIOContext
 	this.customPb = true
 	return this
 }

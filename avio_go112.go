@@ -57,8 +57,8 @@ type AVIOHandlers struct {
 var handlersMap map[uintptr]*AVIOHandlers
 
 type AVIOContext struct {
-	avAVIOContext *C.AVIOContext
-	// avAVIOContext *C.struct_AVIOContext
+	AvAVIOContext *C.AVIOContext
+	// AvAVIOContext *C.struct_AVIOContext
 	handlerKey uintptr
 	CgoMemoryManage
 	buffer *C.uchar
@@ -112,24 +112,24 @@ func NewAVIOContext(ctx *FmtCtx, handlers *AVIOHandlers, size ...int) (*AVIOCont
 		flag = AVIO_FLAG_READ_WRITE
 	}
 
-	if this.avAVIOContext = C.avio_alloc_context(this.buffer, C.int(bufferSize), C.int(flag), unsafe.Pointer(ctx.avCtx), ptrRead, ptrWrite, ptrSeek); this.avAVIOContext == nil {
-		C.av_free(unsafe.Pointer(this.avAVIOContext.buffer))
+	if this.AvAVIOContext = C.avio_alloc_context(this.buffer, C.int(bufferSize), C.int(flag), unsafe.Pointer(ctx.avCtx), ptrRead, ptrWrite, ptrSeek); this.AvAVIOContext == nil {
+		C.av_free(unsafe.Pointer(this.AvAVIOContext.buffer))
 		return nil, errors.New("unable to initialize avio context")
 	}
 
-	this.avAVIOContext.min_packet_size = C.int(bufferSize)
+	this.AvAVIOContext.min_packet_size = C.int(bufferSize)
 
 	return this, nil
 }
 
 func (this *AVIOContext) Free() {
 	delete(handlersMap, this.handlerKey)
-	C.av_free(unsafe.Pointer(this.avAVIOContext.buffer))
-	C.av_free(unsafe.Pointer(this.avAVIOContext))
+	C.av_free(unsafe.Pointer(this.AvAVIOContext.buffer))
+	C.av_free(unsafe.Pointer(this.AvAVIOContext))
 }
 
 func (this *AVIOContext) Flush() {
-	C.avio_flush(this.avAVIOContext)
+	C.avio_flush(this.AvAVIOContext)
 }
 
 //export readCallBack
